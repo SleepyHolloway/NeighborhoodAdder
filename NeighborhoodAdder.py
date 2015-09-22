@@ -1,4 +1,3 @@
-
 """
 Neighborhood Adder:
 This program uses the exterenal module pyshp and Python 3
@@ -22,19 +21,14 @@ with open('31055.geojson') as d:#brings the json data in as a dictionary
 
 for j in range(len(records)): #Loop through each shape in the shapefile
     if records[j][1] == "055": #Skip the entry if the data is not from Douglas County
-        records[j][12] = ""#initialization of string as program was not working without initialization
         for feature in data['features']: #For each neighborhood
             if records[j][4] in feature['properties']['blockids']: # check if the Block id is in the blockids
-                if feature['properties']['label'].replace(" ","_") not in records[j][12]:#checks the entry doesnt already exist
-                    if records[j][12] != "":#checks if the entry is blank
-                        records[j][12] += ","
-                    records[j][12] += feature['properties']['label'].replace(" ","_") #Appends the 'NHOOD' column of the current record with the 'label' value of the current json feature
-    
+                records[j][12] = feature['properties']['label'].replace(" ","_") #Sets the 'NHOOD' column of the current record to the 'label' value of the current json feature
+                break
 
-   
 w = shapefile.Writer(shapefile.POLYGON) #Creates a shapefile writer
 w.fields = list(sf.fields)              #Adds the Census Block fields to the writer
 w.records.extend(records)               #Adds the Census Block records as modified by this program
 w._shapes.extend(sf.shapes())           #Adds the Shapes
 w.save("FinalProduct")                  #Outputs the final file
-print("FinalProduct.* has been created")
+print("FinalProduct.* has been creaated")
